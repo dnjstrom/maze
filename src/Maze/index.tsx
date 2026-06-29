@@ -1,6 +1,5 @@
 import { delay } from "../utils/delay.js"
 import { generateLabyrint } from "./generateMaze.js"
-import { lastOf } from "../utils/lastOf.js"
 import { mazeToSvgPath } from "./mazeToSvgPath.js"
 import { useEffect, useRef, useState } from "react"
 
@@ -9,6 +8,7 @@ let activeMazeIndex = 0
 export const Maze = () => {
   const ref = useRef<HTMLDivElement>(null)
   const [isPaused, setIsPaused] = useState(false)
+  const [isFinished, setIsFinished] = useState(false)
   const isPausedRef = useRef(false)
   const fastForwardRef = useRef(false)
 
@@ -32,6 +32,7 @@ export const Maze = () => {
         fastForwardRef.current = false
         isPausedRef.current = false
         setIsPaused(false)
+        setIsFinished(false)
 
         const cellSize = 16
         const WIDTH = Math.floor(container.clientWidth / cellSize)
@@ -81,6 +82,8 @@ export const Maze = () => {
         if (lastMaze) {
           container.replaceChildren(mazeToSvgPath(lastMaze, mazeOptions))
         }
+
+        setIsFinished(true)
       })
 
       observer.observe(container)
@@ -100,9 +103,10 @@ export const Maze = () => {
 
       <div className="self-end flex gap-2 shrink-0 opacity-30 hover:opacity-100 transition-opacity">
         <button
-          className="outline-none hover:cursor-pointer focus-visible:opacity-100"
+          className="outline-none hover:cursor-pointer focus-visible:opacity-100 disabled:opacity-30 disabled:hover:opacity-30 disabled:cursor-not-allowed"
           aria-label={isPaused ? "Play" : "Pause"}
           onClick={togglePause}
+          disabled={isFinished}
         >
           <svg
             viewBox="0 0 24 24"
@@ -117,9 +121,10 @@ export const Maze = () => {
         </button>
 
         <button
-          className="outline-none hover:cursor-pointer focus-visible:opacity-100"
+          className="outline-none hover:cursor-pointer focus-visible:opacity-100 disabled:opacity-30 disabled:hover:opacity-30 disabled:cursor-not-allowed"
           aria-label="Skip to end"
           onClick={fastForward}
+          disabled={isFinished}
         >
           <svg
             viewBox="0 0 24 24"
