@@ -116,20 +116,20 @@ export function* generateLabyrint(width: number, height: number) {
     cell !== undefined;
     cell = heap.pop()
   ) {
+    if (!isValidPathCell(cell)) {
+      continue
+    }
+
     cell.selected = true
 
     yield maze
 
-    const valid = isValidPathCell(cell)
-
-    if (valid) {
-      cell.type = "PATH"
-      getSquareNeighours(cell)
-        .filter((cell) => cell.type === "WALL")
-        .forEach((cell) => {
-          heap.push(cell)
-        })
-    }
+    cell.type = "PATH"
+    getSquareNeighours(cell)
+      .filter((cell) => cell.type === "WALL")
+      .forEach((cell) => {
+        heap.push(cell)
+      })
 
     cell.selected = false
   }
