@@ -1,15 +1,15 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-a {
-  color: dodgerblue;
-}
+@layer base {
+  a {
+    color: dodgerblue;
+  }
 
-a:hover {
-  text-decoration: underline;
-  cursor: pointer;
-  text-underline-offset: 0.2em;
+  a:hover {
+    text-decoration: underline;
+    cursor: pointer;
+    text-underline-offset: 0.2em;
+  }
 }
 
 .btn {
